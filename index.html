@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10090c">
+  <title>NOCTURNE — Music After Dark</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #10090c;
+      --panel: #1b1015;
+      --wine: #741d38;
+      --red: #c15a76;
+      --gold: #c9a875;
+      --muted: #a18d96;
+      --white: #f6edf0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 0%, #481a2c 0%, transparent 48%),
+        var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      padding: 32px 18px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1080px;
+      margin: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0 34px;
+      border-bottom: 1px solid #49303a;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      letter-spacing: 5px;
+      color: var(--gold);
+    }
+
+    .tagline {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .status {
+      color: var(--red);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 44px 0 34px;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(35px, 6vw, 60px);
+      font-weight: 500;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: rgba(27, 16, 21, 0.91);
+      border: 1px solid #4a2936;
+      border-radius: 18px;
+      padding: 26px;
+      min-width: 0;
+    }
+
+    .section-label {
+      color: var(--gold);
+      letter-spacing: 3px;
+      font-size: 10px;
+      margin-bottom: 22px;
+    }
+
+    .cover {
+      width: min(100%, 330px);
+      aspect-ratio: 1;
+      margin: 0 auto 24px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 45%, #a23d5d 0%, #501a31 29%, #200d18 65%, #10090c 100%);
+      border: 1px solid #784050;
+      box-shadow: 0 18px 55px #0008;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before, .cover::after {
+      content: "";
+      position: absolute;
+      border: 1px solid #d3a7a744;
+      border-radius: 50%;
+      width: 75%;
+      aspect-ratio: 1;
+    }
+
+    .cover::after {
+      width: 55%;
+    }
+
+    .moon {
+      font-size: clamp(70px, 12vw, 110px);
+      color: #e5c5b2;
+      line-height: 1;
+      z-index: 1;
+      text-shadow: 0 0 35px #e5c5b277;
+    }
+
+    .cover-name {
+      z-index: 1;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 5px;
+      margin-top: 16px;
+      font-size: 19px;
+    }
+
+    .track-info {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .track-info h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 29px;
+      font-weight: 500;
+    }
+
+    .track-info p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .progress-row, .time-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .time-row {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 8px;
+    }
+
+    input[type="range"] {
+      accent-color: var(--red);
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    #progress {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin: 25px 0 22px;
+    }
+
+    .control {
+      background: transparent;
+      border: 0;
+      color: var(--white);
+      font-size: 24px;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .control:hover {
+      color: var(--gold);
+      transform: scale(1.12);
+    }
+
+    .play {
+      background: var(--wine);
+      color: white;
+      width: 58px;
+      height: 58px;
+      border: 1px solid #a84d67;
+      border-radius: 50%;
+      font-size: 22px;
+      box-shadow: 0 0 24px #741d3833;
+    }
+
+    .volume {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    #volume {
+      width: 100px;
+    }
+
+    .playlist-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .playlist-title h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 27px;
+      font-weight: 500;
+    }
+
+    .playlist-title span {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .track {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-align: left;
+      color: var(--white);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 12px 10px;
+      margin-bottom: 5px;
+    }
+
+    .track:hover, .track.active {
+      background: #351823;
+      border-color: #633044;
+    }
+
+    .track.active .track-number,
+    .track.active .track-name {
+      color: var(--red);
+    }
+
+    .track-number {
+      width: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .track-art {
+      width: 43px;
+      height: 43px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #8b2949, #25101a);
+      font-size: 21px;
+      flex-shrink: 0;
+    }
+
+    .track:nth-of-type(2) .track-art {
+      background: linear-gradient(135deg, #5c315e, #1b101e);
+    }
+
+    .track:nth-of-type(3) .track-art {
+      background: linear-gradient(135deg, #8c5839, #291713);
+    }
+
+    .track:nth-of-type(4) .track-art {
+      background: linear-gradient(135deg, #334b51, #11181e);
+    }
+
+    .track-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-name {
+      font-size: 12px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .track-artist {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .track-duration {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 13px;
+      background: #10090c;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 35px 0 5px;
+    }
+
+    #message {
+      text-align: center;
+      color: var(--gold);
+      font-size: 11px;
+      min-height: 16px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 18px 12px;
+      }
+
+      header {
+        padding-bottom: 23px;
+      }
+
+      .logo {
+        font-size: 26px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 20px 16px;
+      }
+
+      .cover {
+        max-width: 280px;
+      }
+
+      .hero {
+        padding: 32px 0 25px;
+      }
+
+      .status {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <div class="logo">NOCTURNE</div>
+        <div class="tagline">MUSIC AFTER DARK</div>
+      </div>
+      <div class="status">● NOW PLAYING</div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Your private escape</p>
+      <h1>Somewhere Between<br>Silence & Sound</h1>
+      <p class="subtitle">For the nights that need a soundtrack.</p>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <p class="section-label">01 / THE PLAYER</p>
+
+        <div class="cover">
+          <div class="moon">☾</div>
+          <div class="cover-name">NOCTURNE</div>
+        </div>
+
+        <div class="track-info">
+          <h2 id="song-title">Midnight Reverie</h2>
+          <p id="song-artist">The Midnight Collection</p>
+        </div>
+
+        <audio id="audio" preload="metadata"></audio>
+
+        <div class="progress-row">
+          <input id="progress" type="range"
+                 min="0" max="100" value="0"
+                 aria-label="Track progress">
+        </div>
+
+        <div class="time-row">
+          <span id="current-time">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+          <button class="control" id="prev"
+                  aria-label="Previous track">|◀</button>
+          <button class="control play" id="play"
+                  aria-label="Play">▶</button>
+          <button class="control" id="next"
+                  aria-label="Next track">▶|</button>
+        </div>
+
+        <div class="volume">
+          <span>♫</span>
+          <input id="volume" type="range"
+                 min="0" max="1" step="0.01" value="0.7"
+                 aria-label="Volume">
+          <span>♪</span>
+        </div>
+
+        <p id="message" aria-live="polite">
+          Choose a track and press play.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="playlist-title">
+          <h2>The After Hours</h2>
+          <span>4 TRACKS</span>
+        </div>
+
+        <p class="section-label">02 / YOUR PLAYLIST</p>
+
+        <div id="playlist">
+          <button class="track active" data-index="0">
+            <span class="track-number">01</span>
+            <span class="track-art">☾</span>
+            <span class="track-text">
+              <span class="track-name">Midnight Reverie</span>
+              <span class="track-artist">The Midnight Collection</span>
+            </span>
+            <span class="track-duration">Audio</span>
+          </button>
+
+          <button class="track" data-index="1">
+            <span class="track-number">02</span>
+            <span class="track-art">✦</span>
+            <span class="track-text">
+              <span class="track-name">Velvet Skies</span>
+              <span class="track-artist">The Midnight Collection</span>
+            </span>
+            <span class="track-duration">Audio</span>
+          </button>
+
+          <button class="track" data-index="2">
+            <span class="track-number">03</span>
+            <span class="track-art">♢</span>
+            <span class="track-text">
+              <span class="track-name">Crimson Dreams</span>
+              <span class="track-artist">The Midnight Collection</span>
+            </span>
+            <span class="track-duration">Audio</span>
+          </button>
+
+          <button class="track" data-index="3">
+            <span class="track-number">04</span>
+            <span class="track-art">♜</span>
+            <span class="track-text">
+              <span class="track-name">Last Light</span>
+              <span class="track-artist">The Midnight Collection</span>
+            </span>
+            <span class="track-duration">Audio</span>
+          </button>
+        </div>
+
+        <div class="note">
+          ✦ HEADPHONES RECOMMENDED<br>
+          Four demo tracks are connected below.
+          Replace them with music files you own or
+          have permission to use whenever you're ready.
+        </div>
+      </section>
+    </div>
+
+    <footer>MADE FOR THE HOURS THAT BELONG TO YOU · NOCTURNE</footer>
+  </main>
+
+  <script>
+    // Demo audio URLs. Replace these with your own audio URLs
+    // or local files such as "music/my-song.mp3".
+    const songs = [
+      {
+        title: "Midnight Reverie",
+        artist: "The Midnight Collection",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      },
+      {
+        title: "Velvet Skies",
+        artist: "The Midnight Collection",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+      },
+      {
+        title: "Crimson Dreams",
+        artist: "The Midnight Collection",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+      },
+      {
+        title: "Last Light",
+        artist: "The Midnight Collection",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+      }
+    ];
+
+    const audio = document.getElementById("audio");
+    const playButton = document.getElementById("play");
+    const progress = document.getElementById("progress");
+    const volume = document.getElementById("volume");
+    const title = document.getElementById("song-title");
+    const artist = document.getElementById("song-artist");
+    const currentTime = document.getElementById("current-time");
+    const duration = document.getElementById("duration");
+    const message = document.getElementById("message");
+    const tracks = document.querySelectorAll(".track");
+
+    let currentIndex = 0;
+    let isSeeking = false;
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds)) return "0:00";
+
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+
+      return minutes + ":" + String(secs).padStart(2, "0");
+    }
+
+    function loadSong(index) {
+      currentIndex = (index + songs.length) % songs.length;
+      const song = songs[currentIndex];
+
+      audio.src = song.src;
+      title.textContent = song.title;
+      artist.textContent = song.artist;
+      progress.value = 0;
+      currentTime.textContent = "0:00";
+      duration.textContent = "0:00";
+
+      tracks.forEach((track, i) => {
+        track.classList.toggle("active", i === currentIndex);
+      });
+
+      message.textContent = "Ready when you are.";
+      playButton.textContent = "▶";
+      playButton.setAttribute("aria-label", "Play");
+    }
+
+    async function playSong() {
+      try {
+        await audio.play();
+        playButton.textContent = "Ⅱ";
+        playButton.setAttribute("aria-label", "Pause");
+        message.textContent = "Enjoy the moment.";
+      } catch (error) {
+        message.textContent =
+          "Couldn't play this track. Check your connection or try another.";
+      }
+    }
+
+    function pauseSong() {
+      audio.pause();
+      playButton.textContent = "▶";
+      playButton.setAttribute("aria-label", "Play");
+      message.textContent = "Paused. The night can wait.";
+    }
+
+    playButton.addEventListener("click", () => {
+      if (audio.paused) {
+        playSong();
+      } else {
+        pauseSong();
+      }
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+      loadSong(currentIndex + 1);
+      playSong();
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+      } else {
+        loadSong(currentIndex - 1);
+        playSong();
+      }
+    });
+
+    tracks.forEach(track => {
+      track.addEventListener("click", () => {
+        loadSong(Number(track.dataset.index));
+        playSong();
+      });
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+      duration.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      if (!isSeeking && Number.isFinite(audio.duration) && audio.duration > 0) {
+        progress.value = (audio.currentTime / audio.duration) * 100;
+      }
+
+      currentTime.textContent = formatTime(audio.currentTime);
+    });
+
+    progress.addEventListener("input", () => {
+      isSeeking = true;
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        currentTime.textContent = formatTime(
+          (Number(progress.value) / 100) * audio.duration
+        );
+      }
+    });
+
+    progress.addEventListener("change", () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        audio.currentTime = (Number(progress.value) / 100) * audio.duration;
+      }
+      isSeeking = false;
+    });
+
+    volume.addEventListener("input", () => {
+      audio.volume = Number(volume.value);
+    });
+
+    audio.addEventListener("ended", () => {
+      loadSong(currentIndex + 1);
+      playSong();
+    });
+
+    audio.addEventListener("error", () => {
+      message.textContent =
+        "Audio unavailable. Check the connection or replace this demo URL.";
+      playButton.textContent = "▶";
+    });
+
+    audio.volume = Number(volume.value);
+    loadSong(0);
+  </script>
+</body>
+</html>
